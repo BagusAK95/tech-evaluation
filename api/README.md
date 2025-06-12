@@ -9,7 +9,19 @@ This directory contains the backend RESTful API for the Tech Evaluation project.
 - **Request validation** using `express-validator`
 - **MongoDB** data storage via Mongoose
 - **Environment-based configuration**
-- **CORS, JSON, and Cookie support**
+- **Security**: Helmet, Rate Limiting, mongo-sanitize
+- **Logging**: Morgan (500 errors only)
+
+---
+
+## Security & Middleware
+- **Helmet** for security headers
+- **express-rate-limit** for rate limiting
+- **express-mongo-sanitize** to prevent NoSQL injection
+- **CORS** for cross-origin requests
+- **Morgan** for error logging (500 errors only)
+- **body-parser** for parsing JSON and URL-encoded requests
+- **cookie-parser** for cookie support
 
 ---
 
