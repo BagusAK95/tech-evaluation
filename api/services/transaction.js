@@ -1,4 +1,5 @@
 import TransactionRepository from '../repositories/transaction.js';
+import createError from 'http-errors';
 
 export default class TransactionService {
   constructor() {
@@ -7,10 +8,10 @@ export default class TransactionService {
 
   async getAll(type) {
     try {
-      return await this.repository.getAll(type);
+      const transactions = await this.repository.getAll(type);
+      return { data: transactions };
     } catch (error) {
-      console.error('TransactionService.getAll error' + error.message);
-      throw new Error('Failed to fetch transactions: ' + error.message);
+      throw createError(error.statusCode || 500, error.message);
     }
   }
 
@@ -18,22 +19,21 @@ export default class TransactionService {
     try {
       const transaction = await this.repository.getByID(id);
       if (!transaction) {
-        throw new Error('Transaction not found');
+        throw new createError.NotFound('Transaction not found');
       }
       
-      return transaction;
+      return { data: transaction };
     } catch (error) {
-      console.error('TransactionService.getByID error' + error.message);
-      throw new Error('Failed to fetch transaction: ' + error.message);
+      throw createError(error.statusCode || 500, error.message);
     }
   }
 
   async create(data) {
     try {
-      return await this.repository.create(data);
+      const created = await this.repository.create(data);
+      return { data: created };
     } catch (error) {
-      console.error('TransactionService.create error' + error.message);
-      throw new Error('Failed to create transaction: ' + error.message);
+      throw createError(error.statusCode || 500, error.message);
     }
   }
 
@@ -41,16 +41,16 @@ export default class TransactionService {
     try {
       const transaction = await this.repository.getByID(id);
       if (!transaction) {
-        throw new Error('Transaction not found');
+        throw new createError.NotFound('Transaction not found');
       }
       if (data.status === 'cancelled' && transaction.status === 'completed') {
-        throw new Error('Cannot cancel completed transactions');
+        throw new createError.BadRequest('Cannot cancel completed transactions');
       }
 
-      return await this.repository.update(id, data);
+      const updated = await this.repository.update(id, data);
+      return { data: updated };
     } catch (error) {
-      console.error('TransactionService.update error' + error.message);
-      throw new Error('Failed to update transaction: ' + error.message);
+      throw createError(error.statusCode || 500, error.message);
     }
   }
 
@@ -58,16 +58,17 @@ export default class TransactionService {
     try {
       const transaction = await this.repository.getByID(id);
       if (!transaction) {
-        throw new Error('Transaction not found');
+        throw new createError.NotFound('Transaction not found');
       }
       if (transaction.status === 'completed') {
-        throw new Error('Cannot delete completed transactions');
+        throw new createError.BadRequest('Cannot delete completed transactions');
       }
 
-      return await this.repository.delete(id);
+      await this.repository.delete(id);
+
+      return { message: 'Deleted successfully' };
     } catch (error) {
-      console.error('TransactionService.delete error' + error.message);
-      throw new Error('Failed to delete transaction: ' + error.message);
+      throw createError(error.statusCode || 500, error.message);
     }
   }
 }

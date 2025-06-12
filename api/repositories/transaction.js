@@ -18,7 +18,6 @@ export default class TransactionRepository {
     try {
       return await Transaction.findById(id);
     } catch (error) {
-      console.error('TransactionRepository.getByID error' + error.message);
       throw new Error('Failed to fetch transaction: ' + error.message);
     }
   }
@@ -28,7 +27,6 @@ export default class TransactionRepository {
       const transaction = new Transaction(data);
       return await transaction.save();
     } catch (error) {
-      console.error('TransactionRepository.create error' + error.message);
       throw new Error('Failed to create transaction: ' + error.message);
     }
   }
@@ -37,7 +35,6 @@ export default class TransactionRepository {
     try {
       return await Transaction.findByIdAndUpdate(id, data, { new: true });
     } catch (error) {
-      console.error('TransactionRepository.update error' + error.message);
       throw new Error('Failed to update transaction: ' + error.message);
     }
   }
@@ -46,7 +43,6 @@ export default class TransactionRepository {
     try {
       return await Transaction.findByIdAndDelete(id);
     } catch (error) {
-      console.error('TransactionRepository.delete error' + error.message);
       throw new Error('Failed to delete transaction: ' + error.message);
     }
   }

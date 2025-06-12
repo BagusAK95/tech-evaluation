@@ -30,9 +30,9 @@ export default class TransactionController {
       const { type } = req.query;
       const transactions = await this.service.getAll(type);
 
-      return res.status(200).json({ data: transactions });
+      return res.status(200).json(transactions);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
   }
 
@@ -55,9 +55,9 @@ export default class TransactionController {
       const { id } = req.params;      
       const transaction = await this.service.getByID(id);
 
-      return res.status(200).json({ data: transaction });
+      return res.status(200).json(transaction);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
   }
 
@@ -92,9 +92,9 @@ export default class TransactionController {
         amount
       });
 
-      return res.status(201).json({ data: transaction });
+      return res.status(201).json(transaction);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
   }
 
@@ -126,11 +126,11 @@ export default class TransactionController {
     try {
       const { id } = req.params;
       const { status, description } = req.body;
-      const transaction = await this.service.update(id, { status, description });
+      const result = await this.service.update(id, { status, description });
 
-      return res.status(200).json({ data: transaction });
+      return res.status(200).json(result);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
   }
 
@@ -152,11 +152,11 @@ export default class TransactionController {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      await this.service.delete(id);
+      const result = await this.service.delete(id);
 
-      return res.status(200).json({ message: 'Deleted successfully' });
+      return res.status(200).json(result);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(error.statusCode).json({ message: error.message });
     }
   }
 }
