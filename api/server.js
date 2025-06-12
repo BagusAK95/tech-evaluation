@@ -4,6 +4,11 @@ import path from 'path';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import mongoSanitize from 'express-mongo-sanitize';
+import { rateLimit } from 'express-rate-limit'
+import helmet from "helmet";
+import morgan from 'morgan'
 
 // Internal modules
 import connectDB from './config/db.js';
@@ -16,11 +21,25 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const limiter = rateLimit({
+	windowMs: 1 * 60 * 1000, // 1 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 1 minutes).
+	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+})
+const morganOptions = {
+  skip: (req, res) => res.statusCode != 500 // Only log error
+}
 
 // Middleware setup
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
+app.use(morgan('combined', morganOptions)); // Logger
+app.use(helmet()); // Default security headers
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(mongoSanitize()); // Prevent NoSQL injection attacks
+app.use(cookieParser()); // Parse cookies
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(limiter); // Rate limiting
 
 // API routes
 app.use('/api', router);
