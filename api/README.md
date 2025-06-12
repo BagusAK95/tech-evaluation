@@ -7,8 +7,7 @@ This directory contains the backend RESTful API for the Tech Evaluation project.
 ## Features
 - **CRUD Operations** for transactions (Stake, Borrow, Lend)
 - **Request validation** using `express-validator`
-- **MongoDB** data storage via Mongoose
-- **Environment-based configuration**
+- **MongoDB** data storage
 - **Security**: Helmet, Rate Limiting, mongo-sanitize
 - **Logging**: Morgan (500 errors only)
 
@@ -22,15 +21,6 @@ This directory contains the backend RESTful API for the Tech Evaluation project.
 - **Morgan** for error logging (500 errors only)
 - **body-parser** for parsing JSON and URL-encoded requests
 - **cookie-parser** for cookie support
-
----
-
-## Tech Stack
-- **Node.js** (ES Modules)
-- **Express.js**
-- **MongoDB** with **Mongoose**
-- **express-validator** for request validation
-- **dotenv** for environment management
 
 ---
 
