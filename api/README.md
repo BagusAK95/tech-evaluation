@@ -1,12 +1,11 @@
 # Tech Evaluation API
 
-This directory contains the backend RESTful API for the Tech Evaluation project. It provides endpoints for managing transactions, KYC verification, and related operations, built with Node.js, Express, and MongoDB.
+This directory contains the backend RESTful API for the Tech Evaluation project. It provides endpoints for managing transactions, built with Node.js, Express, and MongoDB.
 
 ---
 
 ## Features
 - **CRUD Operations** for transactions (Stake, Borrow, Lend)
-- **KYC Verification** endpoints
 - **Request validation** using `express-validator`
 - **MongoDB** data storage via Mongoose
 - **Environment-based configuration**
@@ -52,8 +51,6 @@ Set these in your `.env` file:
 - `PORT` - Port for the API server (default: 5800)
 - `MONGODB_URI` - MongoDB connection string
 - `NODE_ENV` - `development` or `production`
-- `KYC_CONTRACT_ADDRESS` - (KYC) Smart contract address
-- `RPC_PROVIDER_URL` - (KYC) Blockchain RPC provider URL
 
 ---
 
@@ -97,26 +94,13 @@ Base path: `/api/transactions`
 #### Validation
 - All endpoints use `express-validator` for strict validation. Errors are returned as:
   ```json
-  { "errors": [ { "msg": "...", "param": "...", ... } ] }
+  { "errors": [ { "msg": "...", "param": "...", } ] }
   ```
 
 #### Error Handling
 - 400: Validation errors or bad input
 - 404: Resource not found
 - 500: Internal server errors
-
----
-
-### KYC
-Base path: `/api/kyc`
-
-| Method | Endpoint     | Description                 |
-|--------|--------------|-----------------------------|
-| POST   | `/verify`    | Verify KYC for an address   |
-| POST   | `/check`     | Check KYC status for address|
-
-#### Request Body
-- `address` (string): Blockchain address to verify/check
 
 ---
 
@@ -133,16 +117,3 @@ api/
 ├── server.js       # Main entry point
 └── README.md       # This file
 ```
-
----
-
-## Contribution
-1. Fork and clone the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes
-4. Push to your fork and open a Pull Request
-
----
-
-## License
-MIT
